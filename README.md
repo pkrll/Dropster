@@ -2,7 +2,7 @@
 Dropster abstracts and simplifies drag and drop and enables file uploads with AJAX.
 
 ### Usage
-The Dropster plugin is depended on the jQuery plugin. Include it along with the plugin files, as shown below:
+The Dropster plugin is depended on the jQuery library. Include it along with the plugin files, as shown below:
 ```html
   <script src="//code.jquery.com/jquery-2.1.4.min.js" charset="utf-8"></script>
   <link rel="stylesheet" href="/path/to/dropster.css" media="screen" charset="utf-8">
@@ -31,6 +31,7 @@ Let the upload commence!
 ```js
 .dropster({
         url               : "/path/to/server/upload/",
+        auto              : true,
         uploadLimit       : 2,
         loaderImagePath   : "/path/to/image.png",
         extensions        : ["jpg", "jpeg", "gif", "png"],
@@ -42,6 +43,7 @@ Let the upload commence!
 ```
 ##### Properties
 * `url`: The request URL path (**required**).
+* `auto`: If set true (default), automatically uploads file when a file is chosen using the file input browse button. The file input element must be inside the drop target.
 * `uploadLimit`: Sets the limit on how many files should be uploaded at once.
 * `loaderImagePath`: Path to the loader image. Will be displayed if the default progress method is used.
 * `extensions`: List of allowed extension. Files with any other extensions will not be uploaded.
@@ -63,6 +65,13 @@ The custom callbacks also have access to these variables:
 
 #### Customization example
 Below follows an example, where the [ProgressBar plugin](https://github.com/pkrll/JavaScript/tree/master/Progressbar) is used instead of the default dialog window.
+```html
+<div id="targetArea">
+    <p>Drag and drop files here</p>
+    <p>or, if you'd like, use the browse button below</p>
+    <p><input type="file" /></p>
+</div>
+```
 ```js
     /**
      * Add the Dropster plugin to the element with
@@ -70,6 +79,7 @@ Below follows an example, where the [ProgressBar plugin](https://github.com/pkrl
      */
     $("#targetArea").dropster({
        url: "/upload/image",
+       auto: true,
        uploadLimit: 5,
        extensions: ["jpg", "jpeg", "png", "gif"],
        onUpload: $.fn.onUpload,

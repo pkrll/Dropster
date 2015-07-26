@@ -1,7 +1,7 @@
 {
   "name": "dropster",
   "version": "1.2.0",
-  "description": "Drag and drop file upload",
+  "description": "Drag and drop file uploads made simple",
   "main": "lib/dropster.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

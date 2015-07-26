@@ -1,11 +1,11 @@
 /**
  * Javascript plugin
- * Dropster 1.2
+ * Dropster 1.3
  *
  * Dropster abstracts and simplifies drag and
  * drop and enables file uploads with AJAX.
  *
- * @version 1.2
+ * @version 1.3
  * @author Ardalan Samimi
  */
 (function($) {
@@ -17,8 +17,11 @@
      */
     var Dropster = function (element, options) {
         this.element    = $(element);
+        this.inputFile  = false;
+        // Set the options
         this.settings   = $.extend({
             url               : false,
+            auto              : true,
             uploadLimit       : 0,
             loaderImagePath   : "/node_modules/dropster/lib/loading-128.png",
             extensions        : ["jpg", "jpeg", "gif", "png"],
@@ -32,6 +35,11 @@
         this.setPublicInterface();
         // Bind the drag events
         this.bindDragEvents();
+        // Bind the input file, if any, to upload
+        // automatically when a file is chosen, but
+        // only if the auto property is set.
+        if (this.settings.auto === true)
+            this.setAutoUpload();
     };
 
     Dropster.prototype = {
@@ -67,6 +75,9 @@
          * @param   mixed   Response property of an XMLHttpRequest object
          */
         onReady: function (responseText) {
+            // Clear the file input, if it exists
+            if (this.inputFile !== false)
+                this.inputFile.val("");
             if ($("#dropster-window").length < 1)
                 this.createWindow(false);
             var divHeader   = $(".dropster-window-header");
@@ -74,7 +85,7 @@
             // Set the new status
             divHeader.html("Upload finish!");
             divBody.children().remove();
-            divBody.html("The images have been successfully uploaded.");
+            divBody.html("The files have been successfully uploaded.");
         },
         /**
          * Called when encountering error. Can be ovverriden.
@@ -127,11 +138,30 @@
             this.publicInterface.totalSizeLoaded  = 0;
         },
         /**
+         * Binds the file input element, if it exists inside the
+         * designated drop area, to automatically upload the file
+         * after user has chosen one with the browse button.
+         *
+         */
+        setAutoUpload: function () {
+            // Check if the input file exists, bind the element
+            // and also add it as a public interface variable.
+            var inputFile = this.element.find("input[type='file']");
+            if (inputFile.length > 0) {
+                var self = this;
+                this.inputFile = inputFile;
+                this.publicInterface.fileInput = this.fileInput;
+                this.inputFile.on("change", function (event) {
+                    self.onDrop(event, true, false);
+                });
+            }
+        },
+        /**
          * Binds the elements and DOM drag events.
          * Called upon initialization.
          *
          */
-        bindDragEvents: function() {
+        bindDragEvents: function () {
             var self = this;
             var elem = this.element;;
             // Bind the elements drag events
@@ -200,12 +230,12 @@
          */
          drop: function (event, elem) {
              var elem   = elem || false;
-             var upload = false;
+             var upload = false, drop = false;
              if (elem !== false) {
                  elem.removeClass("dropster-highlight");
                  upload = true;
              }
-             this.onDrop(event, upload);
+             this.onDrop(event, upload, drop);
         },
         /**
          * Determines if the drag/drop was valid
@@ -214,9 +244,11 @@
          *
          * @param eventObject   To stop default actions
          * @param        bool   Is upload, yes?
+         * @param        bool   Was drop, no?
          */
-         onDrop: function (event, upload) {
-             var upload = upload || false;
+         onDrop: function (event, upload, drop) {
+             var upload = upload || false,
+                   drop = drop || false;
              event.stopPropagation();
              event.preventDefault();
              // Check if an object was dropped on the
@@ -224,7 +256,10 @@
              if (upload === true) {
                  // Sort through the files that were
                  // dropped and add it to the formdata.
-                 var files  = event.originalEvent.dataTransfer.files;
+                 if (drop === true)
+                    var files = event.originalEvent.dataTransfer.files;
+                else
+                    var files = event.currentTarget.files;
                  var fData  = new FormData();
                  var error  = false;
                  var self   = this;
@@ -233,12 +268,7 @@
                      //  anything other than the allowed extensions
                      // then abort the whole operation.
                      if (self.checkExtension(file.name) === false) {
-                         var onError = self.getSetting("onError");
-                         if (onError === false) {
-                            self.onError("Could not upload file " + file.name + ". File extension not allowed.");
-                        } else {
-                            onError("Could not upload file " + file.name + ". File extension not allowed.");
-                        }
+                         self.publicInterface.onError("Could not upload file " + file.name + ". File extension not allowed.");
                          error = true;
                          return false;
                      } else {
@@ -283,7 +313,7 @@
             xhr.onprogress = function (event) {
                 self.publicInterface.onDownload(event);
             }
-            // When the image upload is done, run either
+            // When the file upload is done, run either
             // the user defined or the default function.
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
