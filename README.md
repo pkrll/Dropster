@@ -5,8 +5,8 @@ Dropster abstracts and simplifies drag and drop and enables file uploads with AJ
 The Dropster plugin is depended on the jQuery plugin. Include it along with the plugin files, as shown below:
 ```html
   <script src="//code.jquery.com/jquery-2.1.4.min.js" charset="utf-8"></script>
-  <link rel="stylesheet" href="/path/to/dropster-1.2.css" media="screen" charset="utf-8">
-  <script src="/path/to/dropster-1.2.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="/path/to/dropster.css" media="screen" charset="utf-8">
+  <script src="/path/to/dropster.js" charset="utf-8"></script>
 ```
 You can also install it using npm:
 ```bash
@@ -20,12 +20,12 @@ $(".dragAndDropElement").dropster({
 ```
 Drag the file(s) over the drop zone, and just release. Easy schmeezy.
 
-![Screenshot](https://github.com/pkrll/JavaScript/blob/master/Dropster/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/pkrll/Dropster/master/screenshot.png)
 
 Let the upload commence!
 
-![Screenshot](https://github.com/pkrll/JavaScript/blob/master/Dropster/screenshot-1.png)
-![Screenshot](https://github.com/pkrll/JavaScript/blob/master/Dropster/screenshot-2.png)
+![Screenshot](https://raw.githubusercontent.com/pkrll/Dropster/master/screenshot-1.png)
+![Screenshot](https://raw.githubusercontent.com/pkrll/Dropster/master/screenshot-2.png)
 
 #### Options
 ```js

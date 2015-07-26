@@ -2,8 +2,8 @@
  * Javascript plugin
  * Dropster 1.2
  *
- * Adds drag and drop functionality to an HTML element,
- * and uploading files to the server.
+ * Dropster abstracts and simplifies drag and
+ * drop and enables file uploads with AJAX.
  *
  * @version 1.2
  * @author Ardalan Samimi
