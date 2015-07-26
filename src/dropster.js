@@ -1,11 +1,11 @@
 /**
  * Javascript plugin
- * Dropster 1.3.1
+ * Dropster 1.4.1
  *
  * Dropster abstracts and simplifies drag and
  * drop and enables file uploads with AJAX.
  *
- * @version 1.3.1
+ * @version 1.4.1
  * @author Ardalan Samimi
  */
 (function($) {
@@ -229,10 +229,12 @@
          */
          drop: function (event, elem) {
              var elem   = elem || false;
-             var upload = false, drop = false;
+             var upload = false;
+             var drop = false;
              if (elem !== false) {
                  elem.removeClass("dropster-highlight");
                  upload = true;
+                 drop   = true;
              }
              this.onDrop(event, upload, drop);
         },
@@ -246,8 +248,8 @@
          * @param        bool   Was drop, no?
          */
          onDrop: function (event, upload, drop) {
-             var upload = upload || false,
-                   drop = drop || false;
+             var upload = upload || false;
+             var drop   = drop || false;
              event.stopPropagation();
              event.preventDefault();
              // Check if an object was dropped on the
@@ -255,10 +257,12 @@
              if (upload === true) {
                  // Sort through the files that were
                  // dropped and add it to the formdata.
-                 if (drop === true)
+                 if (drop == true) {
                     var files = event.originalEvent.dataTransfer.files;
-                else
+                } else {
                     var files = event.currentTarget.files;
+                }
+
                  var fData  = new FormData();
                  var error  = false;
                  var self   = this;
