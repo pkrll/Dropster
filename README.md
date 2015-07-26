@@ -59,9 +59,10 @@ Dropster's default progress monitoring can easily be overridden and tailored to 
       this.defaultOnReady();
    }
 ```
-The custom callbacks also have access to these variables:
+The custom callbacks also have access to these variables and methods:
 * `totalSizeToLoad`: The total number of files that are to be uploaded. (**read-only**).
 * `totalSizeLoaded`: Number of files that as of accessing this variable has been uploaded. (**read-only**).
+* `resetFileInput`: This method resets the file input element (if it exists inside the drop area).
 
 #### Customization example
 Below follows an example, where the [ProgressBar plugin](https://github.com/pkrll/JavaScript/tree/master/Progressbar) is used instead of the default dialog window.
@@ -85,12 +86,13 @@ Below follows an example, where the [ProgressBar plugin](https://github.com/pkrl
        onUpload: $.fn.onUpload,
        onDownload: $.fn.onDownload,
        onReady: function (response) {
-         // Remove the progressbar
-         // and parse the response.
-         this.monitor.remove();
-         var parsedResponse = jQuery.parseJSON(response);
-         // Print out the response
-         console.log(parsedResponse);
+           // Reset the file input and
+           // remove the progressbar
+           this.resetFileInput();
+           this.monitor.remove();
+           var parsedResponse = jQuery.parseJSON(response);
+           // Print out the response
+           console.log(parsedResponse);
        }
     });
     /**

@@ -1,11 +1,11 @@
 /**
  * Javascript plugin
- * Dropster 1.3
+ * Dropster 1.3.1
  *
  * Dropster abstracts and simplifies drag and
  * drop and enables file uploads with AJAX.
  *
- * @version 1.3
+ * @version 1.3.1
  * @author Ardalan Samimi
  */
 (function($) {
@@ -76,8 +76,7 @@
          */
         onReady: function (responseText) {
             // Clear the file input, if it exists
-            if (this.inputFile !== false)
-                this.inputFile.val("");
+            this.resetFileInput();
             if ($("#dropster-window").length < 1)
                 this.createWindow(false);
             var divHeader   = $(".dropster-window-header");
@@ -150,7 +149,7 @@
             if (inputFile.length > 0) {
                 var self = this;
                 this.inputFile = inputFile;
-                this.publicInterface.fileInput = this.fileInput;
+                this.publicInterface.resetFileInput = this.resetFileInput.bind(this);
                 this.inputFile.on("change", function (event) {
                     self.onDrop(event, true, false);
                 });
@@ -391,6 +390,15 @@
                 this.createWindow(true);
             // Find the header and show the progress
             $(".dropster-window-header").html(progress);
+        },
+        /**
+         * Resets the file input
+         *
+         */
+        resetFileInput: function () {
+            if (this.inputFile !== false) {
+                this.inputFile.val("");
+            }
         }
     };
 
