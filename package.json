@@ -1,6 +1,6 @@
 {
   "name": "dropster",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Drag and drop file uploads made simple",
   "main": "lib/dropster.js",
   "scripts": {
