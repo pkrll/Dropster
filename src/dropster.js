@@ -1,11 +1,10 @@
 /**
- * Javascript plugin
- * Dropster 1.4.1
+ * Dropster 1.4
  *
  * Dropster abstracts and simplifies drag and
  * drop and enables file uploads with AJAX.
  *
- * @version 1.4.1
+ * @version 1.4.2
  * @author Ardalan Samimi
  */
 (function($) {
@@ -26,23 +25,34 @@
             loaderImagePath   : "/node_modules/dropster/lib/loading-128.png",
             extensions        : ["jpg", "jpeg", "gif", "png"],
             monitor           : false,
-            onDownload        : function(progressEvent)   { },
-            onUpload          : function(progressEvent)   { },
-            onReady           : function(responseText)    { },
-            onError           : function(errorMessage)    { }
+            onDownload        : function(progressEvent) { },
+            onUpload          : function(progressEvent) { },
+            onChange          : function(state, status) { },
+            onReady           : function(response)      { },
+            onError           : function(errorMessage)  { }
         }, options || {});
-        // Set the public interface property.
-        this.setPublicInterface();
+        // Startup method
+        this.onInit();
         // Bind the drag events
         this.bindDragEvents();
-        // Bind the input file, if any, to upload
-        // automatically when a file is chosen, but
-        // only if the auto property is set.
-        if (this.settings.auto === true)
-            this.setAutoUpload();
     };
 
     Dropster.prototype = {
+        /**
+         * initializes public interface property, and
+         * sets the file input to auto upload if set.
+         *
+         */
+        onInit: function () {
+            // Set the public interface property.
+            this.setPublicInterface();
+            console.log(this.publicInterface);
+            // Bind the input file, if any, to upload
+            // automatically when a file is chosen, but
+            // only if the auto property is set.
+            if (this.settings.auto === true)
+                this.setAutoUpload();
+        },
         /**
          * Default monitoring function for downloading and
          * getting response from the server. Will be called
@@ -67,6 +77,16 @@
             if (event.lengthComputable)
                 completed = Math.round((event.loaded / event.total * 1000) / 10);
             this.onProgress("Uploading files... " + completed + "%");
+        },
+        /**
+         * Default callback for onreadystatechange
+         *
+         * @param   state   int
+         * @param   status  int
+         */
+        onChange: function (state, status) {
+            if (state === 4 && status === 404)
+                this.onError("Error code " + status);
         },
         /**
          * The default ready function called when the upload
@@ -301,6 +321,7 @@
                  packageSize = packageSize || false;
              if (dataPackage === false || packageSize === false)
                 return false;
+
             // Declare self as the object, for scope
             // issues. Also, declare the XMLHttpRequest.
             var self = this;
@@ -319,8 +340,12 @@
             // When the file upload is done, run either
             // the user defined or the default function.
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(xhr.readyState);
+                    console.log(xhr.responseText);
                     self.publicInterface.onReady(xhr.responseText);
+                } else {
+                    self.publicInterface.onChange(xhr.readyState, xhr.status, xhr.responseText);
                 }
             }
             // Make the request, only if an URL is set.
@@ -403,6 +428,15 @@
             if (this.inputFile !== false) {
                 this.inputFile.val("");
             }
+        },
+        /**
+         * Update Dropster settings
+         *
+         * @param   object  Collection of settings
+         */
+        updateSettings: function (options) {
+            this.settings = $.extend(this.settings, options);
+            this.onInit();
         }
     };
 
@@ -410,9 +444,13 @@
         return this.each(function() {
             // Save the instance to make sure the plugin does
             // not get called multiple times on same element.
+            // Instead, it should update the settings.
             var instance = $(this).data("plugin_dropster");
-            if (!instance)
+            if (!instance) {
                 $(this).data("plugin_dropster", new Dropster(this, options));
+            } else {
+                instance.updateSettings(options);
+            }
         });
     };
 

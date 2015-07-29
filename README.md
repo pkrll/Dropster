@@ -37,6 +37,7 @@ Let the upload commence!
         extensions        : ["jpg", "jpeg", "gif", "png"],
         onDownload        : function(progressEvent)   { },
         onUpload          : function(progressEvent)   { },
+        onChange          : function(state, status)   { },
         onReady           : function(responseText)    { },
         onError           : function(errorMessage)    { }
     });
@@ -49,6 +50,7 @@ Let the upload commence!
 * `extensions`: List of allowed extension. Files with any other extensions will not be uploaded.
 * `onDownload`: Callback function, called during the XMLHttpRequests onprogress event, and is passed a progressEvent object.
 * `onUpload`: Callback function, called during the XMLHttpRequests upload.onprogress event, and is passed a progressEvent object.
+* `onChange`: Callback for when the onreadystatechange is triggered, and request is not finished (readyState < 4 && status !== 200).
 * `onReady`: Callback function, called when the request has finished and response is ready (readyState === 4). This method is passed the responseText property of the XMLHttpRequest object and will be in charge of parsing the server response.
 
 #### Customization
