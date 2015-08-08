@@ -4,7 +4,7 @@
  * Dropster abstracts and simplifies drag and
  * drop and enables file uploads with AJAX.
  *
- * @version 1.5.0
+ * @version 1.5.1
  * @author Ardalan Samimi
  */
 (function () {
@@ -42,7 +42,7 @@
         onUpload        : function(progressEvent) { },
         onChange        : function(state, status) { },
         onReady         : function(response)      { },
-        onError         : function(errorMessage)  { },
+        onError         : function(errorMessage)  { }
     }
     /**
      * Constructor
@@ -186,7 +186,7 @@
                 if (xhr.readyState === 4 && xhr.status === 200)
                     self.publicInterface.onReady(xhr.responseText);
                 else
-                    self.publicInterface.onChange(xhr.readyState, xhr.status, xhr.responseText);
+                    self.publicInterface.onChange(xhr.readyState, xhr.status);
             }
             // Make sure URL is set before request
             if (self.settings.url !== false) {
@@ -332,7 +332,7 @@
          * @param   int     status
          * @param   object  responseText
          */
-        onChange: function (state, status, responseText) {
+        onChange: function (state, status) {
             if (state === 4 && status === 404)
                 this.onError("Error code " + status);
         },
@@ -449,7 +449,7 @@
             if (this.inputFile !== false) {
                 this.inputFile.value = "";
             }
-        },
+        }
     }
 
 })();
