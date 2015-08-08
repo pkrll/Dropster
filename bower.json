@@ -35,7 +35,7 @@
     "src"
     ".*",
     "package.json",
-    "screenshot*"
+    "screenshot*",
     "npm-debug.log"
   ]
 }
