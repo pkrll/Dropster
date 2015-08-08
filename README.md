@@ -10,7 +10,7 @@ Download the Dropster plugin and include it in your html code like this:
 You can also install it using npm or bower:
 ```bash
 $ npm install dropster
-$ bower install dropster
+$ bower install Dropster
 ```
 Use the plugin as follows (the url property is required):
 ```js
