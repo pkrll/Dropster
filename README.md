@@ -1,10 +1,9 @@
 ## Dropster
-Dropster abstracts and simplifies drag and drop and enables file uploads with AJAX.
+Dropster abstracts and simplifies drag and drop and enables file uploads with AJAX. Since version 1.5.0, a pure Javascript plugin.
 
 ### Usage
-The Dropster plugin is depended on the jQuery library. Include it along with the plugin files, as shown below:
+Download the Dropster plugin and include it in your html code like this:
 ```html
-  <script src="//code.jquery.com/jquery-2.1.4.min.js" charset="utf-8"></script>
   <link rel="stylesheet" href="/path/to/dropster.css" media="screen" charset="utf-8">
   <script src="/path/to/dropster.js" charset="utf-8"></script>
 ```
@@ -14,8 +13,12 @@ $ npm install dropster
 ```
 Use the plugin as follows (the url property is required):
 ```js
-$(".dragAndDropElement").dropster({
-   "url": "/path/to/upload.php"
+document.getElementById("dragAndDropElement").dropster({
+   url: "/path/to/upload.php"
+});
+// You can also initialize the plugin using jQuery:
+$("#dragAndDropElement").dropster({
+    url: "/path/to/upload.php"
 });
 ```
 Drag the file(s) over the drop zone, and just release. Easy schmeezy.
@@ -32,6 +35,7 @@ Let the upload commence!
 .dropster({
         url               : "/path/to/server/upload/",
         auto              : true,
+        createArea        : false,
         uploadLimit       : 2,
         loaderImagePath   : "/path/to/image.png",
         extensions        : ["jpg", "jpeg", "gif", "png"],
@@ -45,6 +49,7 @@ Let the upload commence!
 ##### Properties
 * `url`: The request URL path (**required**).
 * `auto`: If set true (default), automatically uploads file when a file is chosen using the file input browse button. The file input element must be inside the drop target.
+* `createArea`: If true, the plugin will automatically create and style a drop target zone, with an file input element inside it.
 * `uploadLimit`: Sets the limit on how many files should be uploaded at once.
 * `loaderImagePath`: Path to the loader image. Will be displayed if the default progress method is used.
 * `extensions`: List of allowed extension. Files with any other extensions will not be uploaded.
@@ -66,8 +71,17 @@ The custom callbacks also have access to these variables and methods:
 * `totalSizeLoaded`: Number of files that as of accessing this variable has been uploaded. (**read-only**).
 * `resetFileInput`: This method resets the file input element (if it exists inside the drop area).
 
+#### Stylesheet customization
+When a dragged object enters the designated drop area, the plugin will attach the class `dropster-highlight` to it. To change the default style (a 2px white border), you need to override that class.
+```css
+.dropster-highlight {
+    border: none;
+    background: rgba(200,200,200,0.5);
+}
+```
+Do note that if you want to override the default stylings, you need to add your stylesheet file *after* including Dropster's.
 #### Customization example
-Below follows an example, where the [ProgressBar plugin](https://github.com/pkrll/JavaScript/tree/master/Progressbar) is used instead of the default dialog window.
+Below follows an example, where the [ProgressBar plugin](https://github.com/pkrll/JavaScript/tree/master/Progressbar) is used instead of the default dialog window. (**This example uses jQuery.**)
 ```html
 <div id="targetArea">
     <p>Drag and drop files here</p>
