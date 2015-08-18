@@ -1,4 +1,4 @@
-## Dropster  [![npm](https://img.shields.io/npm/v/dropster.svg)](https://www.npmjs.com/package/dropster) [![Bower](https://img.shields.io/bower/v/Dropster.svg)]() [![npm](https://img.shields.io/npm/l/dropster.svg)]()
+## Dropster  [![npm](https://img.shields.io/npm/v/dropster.svg)](https://www.npmjs.com/package/dropster) [![npm downloads](https://img.shields.io/npm/dm/dropster.svg)](https://www.npmjs.com/package/dropster) [![Bower](https://img.shields.io/bower/v/Dropster.svg)]() [![npm](https://img.shields.io/npm/l/dropster.svg)]()
 Dropster abstracts and simplifies drag and drop and enables file uploads with AJAX. Since version 1.5.0, a pure Javascript plugin.
 
 ### Usage
